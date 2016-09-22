@@ -1,0 +1,38 @@
+dataTable重畫時遇到問題啟用以下方法:	
+
+$(document).ready(function(){
+......
+var draw_status = false;
+var	submit_offer_code;
+	
+	$(":checkbox").change(function() {
+		var array = $(this).attr("value").split("_");
+		var offer_code = array[1];
+		if (this.checked) {
+			console.log("checked:" + offer_code);
+			$(":checkbox:not(:checked)").attr( "disabled", "disabled");
+			draw_status = true;
+			submit_offer_code = offer_code;
+			$("#send_data").attr("value", offer_code);
+		} else {
+			console.log("unchecked:" + offer_code);
+			$(":checkbox:not(:checked)").removeAttr( "disabled", "disabled");
+			$("#send_data").removeAttr("value", offer_code);
+			draw_status = false;
+			submit_offer_code = null;
+		}
+	});	
+	
+	$("#dataTable").dataTable();
+	---- draw listner ----
+	$("#dataTable").on( 'draw.dt', function () {
+		if (draw_status) {
+			$(":checkbox:not(:checked)").attr( "disabled", "disabled");
+			draw_status = true;
+		} else {
+			$(":checkbox:not(:checked)").removeAttr( "disabled", "disabled");
+			draw_status = false;
+		}
+	});
+  ......
+});
